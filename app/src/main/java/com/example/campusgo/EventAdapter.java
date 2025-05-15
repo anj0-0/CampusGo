@@ -33,6 +33,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             noteTextView = itemView.findViewById(R.id.eventNoteTextView);
         }
     }
+    //
 
     @NonNull
     @Override
