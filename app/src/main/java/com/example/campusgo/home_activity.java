@@ -4,7 +4,7 @@ import static com.example.campusgo.R.id.goodDay;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextClock;
 import android.widget.TextView;
@@ -22,7 +22,7 @@ public class home_activity extends AppCompatActivity {
     TextClock timeTeller;
     TextView dateToday, goodDayText;
     ImageView qrIcon, mapIcon, searchIcon;
-    Button logoutButton;
+    ImageButton logoutButton, calendarBtn, settingsBtn;
     GoogleSignInClient gsc;
     FirebaseAuth auth;
 
@@ -31,10 +31,15 @@ public class home_activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_screen);
 
+        // Firebase & Google sign-in setup
         auth = FirebaseAuth.getInstance();
         gsc = GoogleSignIn.getClient(this, new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build());
 
+        // UI element bindings
         logoutButton = findViewById(R.id.logoutBtn);
+        calendarBtn = findViewById(R.id.calendarBtn);
+        settingsBtn = findViewById(R.id.settingsBtn);
+
         timeTeller = findViewById(R.id.timeTeller);
         dateToday = findViewById(R.id.dateToday);
         qrIcon = findViewById(R.id.qr_icon);
@@ -42,14 +47,14 @@ public class home_activity extends AppCompatActivity {
         searchIcon = findViewById(R.id.search_icon);
         goodDayText = findViewById(goodDay);
 
-        // Display current date
+        // Set date
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy", Locale.getDefault());
         dateToday.setText(sdf.format(new Date()));
 
         // Set time zone
         timeTeller.setTimeZone("Asia/Singapore");
 
-        // Fetch current user
+        // Greet user
         FirebaseUser user = auth.getCurrentUser();
         String userId = "guest_user";
 
@@ -62,25 +67,32 @@ public class home_activity extends AppCompatActivity {
             goodDayText.setText("Good day, Guest!");
         }
 
+        String finalUserId = userId; // for lambda usage
+
         // Logout
         logoutButton.setOnClickListener(view -> {
             auth.signOut();
             gsc.signOut().addOnCompleteListener(task -> redirectToLogin());
         });
 
-        // QR Icon Click → pass userId to qr.java
-        String finalUserId = userId; // for lambda usage
+        // QR Code Icon
         qrIcon.setOnClickListener(v -> {
             Intent intent = new Intent(home_activity.this, qr.class);
             intent.putExtra("USER_DATA", finalUserId);
             startActivity(intent);
         });
 
-        // Campus Map
+        // Map
         mapIcon.setOnClickListener(v -> startActivity(new Intent(home_activity.this, floor.class)));
 
         // Room Availability
         searchIcon.setOnClickListener(v -> startActivity(new Intent(home_activity.this, room_available.class)));
+
+        // Calendar
+        calendarBtn.setOnClickListener(v -> startActivity(new Intent(home_activity.this, AdminCalendar.class)));
+
+        // Settings
+        settingsBtn.setOnClickListener(v -> startActivity(new Intent(home_activity.this, Settings.class)));
     }
 
     private void redirectToLogin() {

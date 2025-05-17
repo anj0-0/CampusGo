@@ -6,7 +6,7 @@ import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.example.campusgo.EventItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -90,19 +90,23 @@ public class AdminCalendar extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 eventList.clear();
-                for (DataSnapshot data : snapshot.getChildren()) {
-                    EventItem item = data.getValue(EventItem.class);
-                    if (item != null) {
-                        item.setId(data.getKey());
-                        eventList.add(item);
+
+                if (snapshot.exists()) {
+                    for (DataSnapshot data : snapshot.getChildren()) {
+                        EventItem item = data.getValue(EventItem.class);
+                        if (item != null) {
+                            item.setId(data.getKey());
+                            eventList.add(item);
+                        }
                     }
                 }
+
                 adapter.updateList(eventList);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(TodolistActivity.this, "Failed to load events", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdminCalendar.this, "Error loading events: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
