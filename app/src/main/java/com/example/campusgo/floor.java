@@ -19,16 +19,15 @@ public class floor extends AppCompatActivity {
         backButton =  findViewById(R.id.backBtn);
 
         groundFloorButton.setOnClickListener(v -> {
-            Intent intent = new Intent(floor.this, ImageViewerActivity.class);
-            intent.putExtra("imageResId", R.drawable.ground); // Replace "ground" with the actual drawable name
+            Intent intent = new Intent(floor.this, ground_map.class);
             startActivity(intent);
         });
 
         secondFloorButton.setOnClickListener(v -> {
-            Intent intent = new Intent(floor.this, ImageViewerActivity.class);
-            intent.putExtra("imageResId", R.drawable.second_floor); // Replace "second" with the actual drawable name
+            Intent intent = new Intent(floor.this, second_floor_map.class);
             startActivity(intent);
         });
+
 
         backButton.setOnClickListener(v -> {
             Intent intent = new Intent(floor.this, home_activity.class);

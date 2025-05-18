@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:text="Category"
             android:textSize="14sp"
-            android:textColor="@color/gray"/>
+            android:textColor="@color/black"/>
 
         <TextView
             android:id="@+id/eventNoteTextView"
